@@ -41,9 +41,17 @@ curl -L -o vcluster "https://github.com/loft-sh/vcluster/releases/latest/downloa
 
 ## 1. Clone or Fork this Repository
 
+```
+git clone git@github.com:la-cc/working-with-vcluster.git
+```
+
 ## 2. Overwrite the values in values.yaml
 
-If you don't want use a ingress with SSL passthrough as TLS termination to connect to the vcluster, then set `ingress.enabled: false` and delete the `syncer` config.
+If you don't want use a ingress with SSL passthrough as TLS termination to connect to the vcluster, then set `ingress.enabled: false` and delete the `syncer` config. 
+
+If you want use a ingress with SSL passthrough as TLS termination to connect to the vcluster, then please make sure you have enabled the SSL passthrough feature, which is disabled by default. For the nginx ingress controller you have only to set `--enable-ssl-passthrough` to enables the [SSL Passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/?_gl=1*1ircp4t*_ga*MTQzOTI4NzczOS4xNjc5ODMxNDIw*_ga_4RQQZ3WGE9*MTY3OTkwNzA5Ni41LjEuMTY3OTkwNzE5MS4yNy4wLjA.#ssl-passthrough) feature, which is disabled by default.
+
+
 
 ```
 ingress:
