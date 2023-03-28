@@ -1,5 +1,7 @@
 # Overview
 
+*_NOTE (28.03.2023)_*: In the exchange with a contributor of loft-sh it turned out that the requested solution should run in rootless mode by default. In addition, the documentation will soon be adapted to the missing values.  
+
 This is a short tutorial on how to get vcluster deployed with the K3s distribution in rootless mode (running as non-root user).
 
 There are some errors in the official documentation.
@@ -7,7 +9,6 @@ The documentation is complete, but spread over different steps.
 Furthermore the necessary values like `fsGroup: 12345` and `securityContext.runAsGroup: 12345` are not declared in the values.yaml of the chart.
 You can find these out if you take a closer look at the templates.
 
-The further goal was also to enable access to the cluster via an ingress that is terminated via SSL passthrough.
 
 # vcluster k3s
 
@@ -47,9 +48,11 @@ git clone git@github.com:la-cc/working-with-vcluster.git
 
 ## 2. Overwrite the values in values.yaml
 
-If you don't want use a ingress with SSL passthrough as TLS termination to connect to the vcluster, then set `ingress.enabled: false` and delete the `syncer` config. 
+_NOTE (28.03.2023):_ TLS termination works even without a valid certificate. The vcluster then terminates it via the fake certificate, which has been signed by the kubernetes cluster anyway. This means that authentication is still possible.
 
-If you want use a ingress with SSL passthrough as TLS termination to connect to the vcluster, then please make sure you have enabled the SSL passthrough feature, which is disabled by default. For the nginx ingress controller you have only to set `--enable-ssl-passthrough` to enables the [SSL Passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/?_gl=1*1ircp4t*_ga*MTQzOTI4NzczOS4xNjc5ODMxNDIw*_ga_4RQQZ3WGE9*MTY3OTkwNzA5Ni41LjEuMTY3OTkwNzE5MS4yNy4wLjA.#ssl-passthrough) feature, which is disabled by default.
+If you don't want use a ingress to the vcluster, then set `ingress.enabled: false` and delete the `syncer` config.
+
+If you want use a ingress with SSL passthrough as TLS termination with a valid cert to connect to the vcluster, then please make sure you have enabled the SSL passthrough feature, which is disabled by default. For the nginx ingress controller you have only to set `--enable-ssl-passthrough` to enables the [SSL Passthrough](https://kubernetes.github.io/ingress-nginx/user-guide/tls/?_gl=1*1ircp4t*_ga*MTQzOTI4NzczOS4xNjc5ODMxNDIw*_ga_4RQQZ3WGE9*MTY3OTkwNzA5Ni41LjEuMTY3OTkwNzE5MS4yNy4wLjA.#ssl-passthrough) feature, which is disabled by default.
 
 
 
